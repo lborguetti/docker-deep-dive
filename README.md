@@ -130,7 +130,7 @@ O subsistema de rede do Docker é conectável, usando drivers. Vários drivers e
 
 Abra um terminal e digite: `docker info` observe os drivers de rede e demais informações.
 
-* **bridge** é o driver de rede padrão. Se você não especificar um driver, este é o tipo de rede que você está criando.
+* **bridge [legacy]** é o driver de rede padrão. Se você não especificar um driver, este é o tipo de rede que você está criando.
 
     * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
@@ -156,9 +156,9 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 digite (host): `sudo tcpdump -i docker0 -Nnnl`
 
-    * no terminal 2 digite (container 2): `ping [endereço do container 2]`
+    * no terminal 2 digite (container 2): `ping [endereço do container 1]`
 
-    * no terminal 3 observe o resultado.
+    * no terminal 3 (host): observe o resultado.
 
     * no terminal 1 digite (container 1): `cat /etc/hosts`
 
@@ -168,4 +168,46 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 2 digite (container 2): `ping container1`
 
-    * no terminal 3 observe o resultado.
+    * no terminal 3 (host): observe o resultado.
+
+* **bridge User-defined** fornecem resolução automática de DNS, compartilham variáveis de ambiente e melhor insolamento entre contêineres. Os contêineres também podem ser conectados e desconectados de redes em tempo de execução.
+
+    * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
+
+    * no terminal 3 digite (host): `docker network create neotech`
+
+    * no terminal 3 digite (host): `docker network ls`
+
+    * no terminal 3 digite (host): `docker network inspect neotech`
+
+    * no terminal 3 digite (host): `brctl show` observe as interfaces.
+
+    * no terminal 3 digite (host): `ip address show br-NNNN` e observe o endereço de rede (trocar br-NNNN pelo nome correto da interface).
+
+    * no terminal 3 digite (host): `sudo tcpdump -i br-NNNN -Nnnl` (trocar br-NNNN pelo nome correto da interface).
+
+    * no terminal 1 digite (container 1): `docker run --name container1 --network neotech --rm --tty --interactive debian /bin/bash`
+
+    * no terminal 1 digite (container 1): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 1 digite (container 1): `ip route show` observe o endereço do gateway padrão.
+
+    * no terminal 2 digite (container 2): `docker run --name container2 --network neotech --rm --tty --interactive debian /bin/bash`
+
+    * no terminal 2 digite (container 2): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 2 digite (container 2): `ip route show` observe o endereço do gateway padrão.
+
+    * no terminal 2 digite (container 2): `ping [endereço do container 1]`
+
+    * no terminal 3 (host): observe o resultado.
+
+    * no terminal 1 digite (container 1): `cat /etc/hosts`
+
+    * no terminal 1 digite (container 1): `ping container2`
+
+    * no terminal 2 digite (container 2): `cat /etc/hosts`
+
+    * no terminal 2 digite (container 2): `ping container1`
+
+    * no terminal 3 (host): observe o resultado.
