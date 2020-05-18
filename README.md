@@ -1,3 +1,4 @@
+
 Docker "Deep Dive"
 ===
 
@@ -122,3 +123,49 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
     `tree nginx`
 
     `jq < nginx/manifest.json`
+
+## Docker Network
+
+O subsistema de rede do Docker é conectável, usando drivers. Vários drivers existem por padrão e fornecem funcionalidades básicas de rede.
+
+Abra um terminal e digite: `docker info` observe os drivers de rede e demais informações.
+
+* **bridge** é o driver de rede padrão. Se você não especificar um driver, este é o tipo de rede que você está criando.
+
+    * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
+
+    * no terminal 1 digite (container 1): `docker run --name container1 --rm --tty --interactive debian /bin/bash`
+
+    * no terminal 1 digite (container 1): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 1 digite (container 1): `ip route show` observe o endereço do gateway padrão.
+
+    * no terminal 2 digite (container 2): `docker run --name container2 --link container1 --rm --tty --interactive debian /bin/bash`
+
+    * no terminal 2 digite (container 2): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 2 digite (container 2): `ip route show` observe o endereço do gateway padrão.
+
+    * no terminal 3 digite (host): `docker network ls` observe as redes.
+
+    * no terminal 3 digite (host): `brctl show` observe as interfaces.
+
+    * no terminal 3 digite (host): `ip address show` e observe as interfaces /endereços de rede.
+
+    * no terminal 3 digite (host): `ip address show docker0` e observe o endereço de rede.
+
+    * no terminal 3 digite (host): `sudo tcpdump -i docker0 -Nnnl`
+
+    * no terminal 2 digite (container 2): `ping [endereço do container 2]`
+
+    * no terminal 3 observe o resultado.
+
+    * no terminal 1 digite (container 1): `cat /etc/hosts`
+
+    * no terminal 1 digite (container 1): `ping container2`
+
+    * no terminal 2 digite (container 2): `cat /etc/hosts`
+
+    * no terminal 2 digite (container 2): `ping container1`
+
+    * no terminal 3 observe o resultado.
