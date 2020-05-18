@@ -28,7 +28,7 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
                                  Docker Rm
 ```
 
-* images vs containers
+* imagens vs contêiners
 
     Fundamentalmente, um contêiner não passa de um processo em execução, com alguns recursos adicionais de encapsulamento aplicados a ele para mantê-lo isolado do seu S.O e de outros contêineres.
 
@@ -46,39 +46,39 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     * no terminal 1 digite: `docker run debian bash`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
 
     * no terminal 1 digite: `docker run --tty --interactive debian bash`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
 
     * no terminal 1 digite `exit` ou `Control+D`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
 
     * no terminal 2 digite: `docker rm $(docker ps --all --quiet)`
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de containers.
+    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
 
 * prática:
 
-    1. executar um container e adicionar um processo em execução em primeiro plano
+    1. executar um contêiner e adicionar um processo em execução em primeiro plano
 
     `docker pull debian`
 
     `docker run --name baleia debian /bin/bash -c "while true; do echo baleia: \$(id); sleep 1; done"`
 
-    2. pare o container em execucação
+    2. pare o contêiner em execucação
 
     `docker ps`
 
     `docker stop`
 
-    6. remova o container
+    6. remova o contêiner
 
     `docker ps --all`
 
@@ -134,17 +134,17 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
-    * no terminal 1 digite (container 1): `docker run --name container1 --rm --tty --interactive debian /bin/bash`
+    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --rm --tty --interactive debian /bin/bash`
 
-    * no terminal 1 digite (container 1): `ip address show` observe as interfaces e anote o endereço de rede.
+    * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
 
-    * no terminal 1 digite (container 1): `ip route show` observe o endereço do gateway padrão.
+    * no terminal 1 digite (contêiner 1): `ip route show` observe o endereço do gateway padrão.
 
-    * no terminal 2 digite (container 2): `docker run --name container2 --link container1 --rm --tty --interactive debian /bin/bash`
+    * no terminal 2 digite (contêiner 2): `docker run --name conteiner2 --link conteiner1 --rm --tty --interactive debian /bin/bash`
 
-    * no terminal 2 digite (container 2): `ip address show` observe as interfaces e anote o endereço de rede.
+    * no terminal 2 digite (contêiner 2): `ip address show` observe as interfaces e anote o endereço de rede.
 
-    * no terminal 2 digite (container 2): `ip route show` observe o endereço do gateway padrão.
+    * no terminal 2 digite (contêiner 2): `ip route show` observe o endereço do gateway padrão.
 
     * no terminal 3 digite (host): `docker network ls` observe as redes.
 
@@ -154,19 +154,19 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 digite (host): `ip address show docker0` e observe o endereço de rede.
 
-    * no terminal 3 digite (host): `sudo tcpdump -i docker0 -Nnnl`
+    * no terminal 3 digite (host): `sudo tcpdump --interface docker0 -Nnnl`
 
-    * no terminal 2 digite (container 2): `ping [endereço do container 1]`
+    * no terminal 2 digite (contêiner 2): `ping [endereço do contêiner 1]`
 
     * no terminal 3 (host): observe o resultado.
 
-    * no terminal 1 digite (container 1): `cat /etc/hosts`
+    * no terminal 1 digite (contêiner 1): `cat /etc/hosts`
 
-    * no terminal 1 digite (container 1): `ping container2`
+    * no terminal 1 digite (contêiner 1): `ping conteiner2`
 
-    * no terminal 2 digite (container 2): `cat /etc/hosts`
+    * no terminal 2 digite (contêiner 2): `cat /etc/hosts`
 
-    * no terminal 2 digite (container 2): `ping container1`
+    * no terminal 2 digite (contêiner 2): `ping conteiner1`
 
     * no terminal 3 (host): observe o resultado.
 
@@ -184,30 +184,55 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 digite (host): `ip address show br-NNNN` e observe o endereço de rede (trocar br-NNNN pelo nome correto da interface).
 
-    * no terminal 3 digite (host): `sudo tcpdump -i br-NNNN -Nnnl` (trocar br-NNNN pelo nome correto da interface).
+    * no terminal 3 digite (host): `sudo tcpdump --interface br-NNNN -Nnnl` (trocar br-NNNN pelo nome correto da interface).
 
-    * no terminal 1 digite (container 1): `docker run --name container1 --network neotech --rm --tty --interactive debian /bin/bash`
+    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --network neotech --rm --tty --interactive debian /bin/bash`
 
-    * no terminal 1 digite (container 1): `ip address show` observe as interfaces e anote o endereço de rede.
+    * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
 
-    * no terminal 1 digite (container 1): `ip route show` observe o endereço do gateway padrão.
+    * no terminal 1 digite (contêiner 1): `ip route show` observe o endereço do gateway padrão.
 
-    * no terminal 2 digite (container 2): `docker run --name container2 --network neotech --rm --tty --interactive debian /bin/bash`
+    * no terminal 2 digite (contêiner 2): `docker run --name conteiner2 --network neotech --rm --tty --interactive debian /bin/bash`
 
-    * no terminal 2 digite (container 2): `ip address show` observe as interfaces e anote o endereço de rede.
+    * no terminal 2 digite (contêiner 2): `ip address show` observe as interfaces e anote o endereço de rede.
 
-    * no terminal 2 digite (container 2): `ip route show` observe o endereço do gateway padrão.
+    * no terminal 2 digite (contêiner 2): `ip route show` observe o endereço do gateway padrão.
 
-    * no terminal 2 digite (container 2): `ping [endereço do container 1]`
+    * no terminal 2 digite (contêiner 2): `ping [endereço do contêiner 1]`
 
     * no terminal 3 (host): observe o resultado.
 
-    * no terminal 1 digite (container 1): `cat /etc/hosts`
+    * no terminal 1 digite (contêiner 1): `cat /etc/hosts`
 
-    * no terminal 1 digite (container 1): `ping container2`
+    * no terminal 1 digite (contêiner 1): `ping conteiner2`
 
-    * no terminal 2 digite (container 2): `cat /etc/hosts`
+    * no terminal 2 digite (contêiner 2): `cat /etc/hosts`
 
-    * no terminal 2 digite (container 2): `ping container1`
+    * no terminal 2 digite (contêiner 2): `ping conteiner1`
+
+    * no terminal 3 (host): observe o resultado.
+
+
+* **docker run --publish**: por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host.
+
+    * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
+
+    * no terminal 1 digite (host):`docker run --rm --name nginx --publish 8080:80 nginx`
+
+    * no terminal 2 digite (host): `docker port nginx` ou `docker ps`
+
+    * no terminal 3 digite (host): `sudo tcpdump --interface docker0 -Nnnl`
+
+    * no terminal 2 digite (host): `docker inspect -f "{{ .NetworkSettings.IPAddress }}" nginx` anote o endereço do contêiner.
+
+    * no terminal 2 digite (host): `curl http://ip-conteiner:80` (trocar ip-conteiner pelo endereço do contêiner)
+
+    * no terminal 3 (host): observe o resultado.
+
+    * no terminal 2 digite (host): `sudo iptables --table nat --list DOCKER --numeric --verbose`
+
+    * no terminal 2 digite (host): `ip address show $(ip route get 8.8.8.8 | awk '{print $5}')` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 2 digite (host): `curl http://ip-host:8080` (trocar ip-host pelo endereço da interface)
 
     * no terminal 3 (host): observe o resultado.
