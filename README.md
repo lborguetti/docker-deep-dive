@@ -170,7 +170,7 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 (host): observe o resultado.
 
-* **bridge User-defined** fornecem resolução automática de DNS, compartilham variáveis de ambiente e melhor insolamento entre contêineres. Os contêineres também podem ser conectados e desconectados de redes em tempo de execução.
+* **bridge [user-defined]** fornecem resolução automática de DNS, compartilham variáveis de ambiente e melhor insolamento entre contêineres. Os contêineres também podem ser conectados e desconectados de redes em tempo de execução.
 
     * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
@@ -212,8 +212,21 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 (host): observe o resultado.
 
+*  **host** se você usar o modo de rede host para um contêiner, a stack de rede desse contêiner não será isolada do host Docker. A rede em modo host pode ser útil para otimizar o desempenho. O driver de rede do host funciona apenas em hosts Linux.
 
-* **docker run --publish**: por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host.
+    * abra dois terminais: (terminal 1) e (terminal 2)
+
+    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --rm --tty --interactive --net=host debian /bin/bash`
+
+    * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 1 digite (contêiner 1): `ip route show` observe o endereço do gateway padrão.
+
+    * no terminal 2 digite (host): `ip address show` observe as interfaces e anote o endereço de rede.
+
+    * no terminal 2 digite (host): `ip route show` observe o endereço do gateway padrão.
+
+* **--publish**: por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host.
 
     * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
