@@ -38,31 +38,31 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     * abra dois terminais: (terminal 1) e (terminal 2)
 
-    * no terminal 1 digite:`docker images` e observe as imagens locais.
+    * no terminal 1 digite (host):`docker images` e observe as imagens locais.
 
-    * no terminal 1 digite: `docker pull debian`
+    * no terminal 1 digite (host): `docker pull debian`
 
-    * no terminal 1 digite:`docker images` e observe a lista de imagens locais.
+    * no terminal 1 digite (host):`docker images` e observe a lista de imagens locais.
 
-    * no terminal 1 digite: `docker run debian bash`
+    * no terminal 1 digite (host): `docker run debian bash`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps` e observe a lista de contêiners.
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps --all` e observe a lista de contêiners.
 
-    * no terminal 1 digite: `docker run --tty --interactive debian bash`
+    * no terminal 1 digite (host): `docker run --tty --interactive debian bash`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps` e observe a lista de contêiners.
 
-    * no terminal 1 digite `exit` ou `Control+D`
+    * no terminal 1 digite (contêiner) `exit` ou `Control+D`
 
-    * no terminal 2 digite: `docker ps` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps` e observe a lista de contêiners.
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps --all` e observe a lista de contêiners.
 
-    * no terminal 2 digite: `docker rm $(docker ps --all --quiet)`
+    * no terminal 2 digite (host): `docker rm $(docker ps --all --quiet)`
 
-    * no terminal 2 digite: `docker ps --all` e observe a lista de contêiners.
+    * no terminal 2 digite (host): `docker ps --all` e observe a lista de contêiners.
 
 * prática:
 
@@ -70,7 +70,7 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     `docker pull debian`
 
-    `docker run --name baleia debian /bin/bash -c "while true; do echo baleia: \$(id); sleep 1; done"`
+    `docker run --name=baleia debian /bin/bash -c "while true; do echo baleia: \$(id); sleep 1; done"`
 
     2. pare o contêiner em execucação
 
@@ -88,23 +88,23 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
 * abra um terminal
 
-    * digite: `docker pull hello-world`
+    * digite (host): `docker pull hello-world`
 
-    * digite: `docker save hello-world > hello-world.tar`
+    * digite (host): `docker save hello-world > hello-world.tar`
 
-    * digite: `mkdir -p hello-world`
+    * digite (host): `mkdir -p hello-world`
 
-    * digite: `tar --directory hello-world --extract --file hello-world.tar`
+    * digite (host): `tar --directory hello-world --extract --file hello-world.tar`
 
-    * digite: `tree hello-world` ou `find hello-world`
+    * digite (host): `tree hello-world` ou `find hello-world`
 
-    * digite: `jq < hello-world/manifest.json`
+    * digite (host): `jq < hello-world/manifest.json`
 
-    * digite: `jq < hello-world/c8f25f0787b14b09638a294eab0b30b81c82295b8aa5e1df3fb36796fa6d0179/json`
+    * digite (host): `jq < hello-world/c8f25f0787b14b09638a294eab0b30b81c82295b8aa5e1df3fb36796fa6d0179/json`
 
-    * digite: `tar --extract --file hello-world/c8f25f0787b14b09638a294eab0b30b81c82295b8aa5e1df3fb36796fa6d0179/layer.tar`
+    * digite (host): `tar --extract --file hello-world/c8f25f0787b14b09638a294eab0b30b81c82295b8aa5e1df3fb36796fa6d0179/layer.tar`
 
-    * digite: `./helo`
+    * digite (host): `./helo`
 
 *  prática:
 
@@ -134,13 +134,13 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
-    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --rm --tty --interactive debian /bin/bash`
+    * no terminal 1 digite (host): `docker run --name=conteiner1 --rm --tty --interactive debian /bin/bash`
 
     * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
 
     * no terminal 1 digite (contêiner 1): `ip route show` observe o endereço do gateway padrão.
 
-    * no terminal 2 digite (contêiner 2): `docker run --name conteiner2 --link conteiner1 --rm --tty --interactive debian /bin/bash`
+    * no terminal 2 digite (host): `docker run --name=conteiner2 --link=conteiner1 --rm --tty --interactive debian /bin/bash`
 
     * no terminal 2 digite (contêiner 2): `ip address show` observe as interfaces e anote o endereço de rede.
 
@@ -186,13 +186,13 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 digite (host): `sudo tcpdump --interface br-NNNN -Nnnl` (trocar br-NNNN pelo nome correto da interface).
 
-    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --network neotech --rm --tty --interactive debian /bin/bash`
+    * no terminal 1 digite (host): `docker run --name=conteiner1 --network=neotech --rm --tty --interactive debian /bin/bash`
 
     * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
 
     * no terminal 1 digite (contêiner 1): `ip route show` observe o endereço do gateway padrão.
 
-    * no terminal 2 digite (contêiner 2): `docker run --name conteiner2 --network neotech --rm --tty --interactive debian /bin/bash`
+    * no terminal 2 digite (host): `docker run --name=conteiner2 --network=neotech --rm --tty --interactive debian /bin/bash`
 
     * no terminal 2 digite (contêiner 2): `ip address show` observe as interfaces e anote o endereço de rede.
 
@@ -212,11 +212,11 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 (host): observe o resultado.
 
-*  **host** se você usar o modo de rede host para um contêiner, a stack de rede desse contêiner não será isolada do host Docker. A rede em modo host pode ser útil para otimizar o desempenho. O driver de rede do host funciona apenas em hosts Linux.
+*  **host** pode ser útil para otimizar o desempenho. Se você usar o modo de rede host para um contêiner, a stack de rede desse contêiner não será isolada do host. O driver de rede do host funciona apenas em hosts Linux.
 
     * abra dois terminais: (terminal 1) e (terminal 2)
 
-    * no terminal 1 digite (contêiner 1): `docker run --name conteiner1 --rm --tty --interactive --net=host debian /bin/bash`
+    * no terminal 1 digite (host): `docker run --name=conteiner1 --network=host --rm --tty --interactive debian /bin/bash`
 
     * no terminal 1 digite (contêiner 1): `ip address show` observe as interfaces e anote o endereço de rede.
 
@@ -226,11 +226,11 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 2 digite (host): `ip route show` observe o endereço do gateway padrão.
 
-* **--publish**: por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host.
+Por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host. Obs: Não é um "driver" de rede do Docker.
 
-    * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
+* abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
-    * no terminal 1 digite (host):`docker run --rm --name nginx --publish 8080:80 nginx`
+    * no terminal 1 digite (host):`docker run --name=nginx --publish=8080:80 --rm nginx`
 
     * no terminal 2 digite (host): `docker port nginx` ou `docker ps`
 
