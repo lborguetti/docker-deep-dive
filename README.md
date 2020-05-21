@@ -76,13 +76,29 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     `docker ps`
 
-    `docker stop`
+    `docker stop baleia`
+
+    3. remova o contêiner
+
+    `docker ps --all`
+
+    `docker rm baleia`
+
+    4. execute novamente o container
+
+    `docker run --name=baleia debian /bin/bash -c "while true; do echo baleia: \$(id); sleep 1; done"`
+
+    5. pare o contêiner em execucação (usando docker kill)
+
+    `docker ps`
+
+    `docker kill baleia`
 
     6. remova o contêiner
 
     `docker ps --all`
 
-    `docker rm`
+    `docker rm baleia`
 
 ## Dig a Docker Image
 
