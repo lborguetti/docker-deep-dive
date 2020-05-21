@@ -146,9 +146,9 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     `docker images --no-trunc nginx:1.17.10`
 
-    `jq '.[0].Layers' < nginx/manifest.json`
-
     3. descompatando algumas "layers"
+
+    `jq '.[0].Layers' < nginx/manifest.json`
 
     `mkdir --parents layer1 layer2 layer3`
 
@@ -164,6 +164,10 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     `du -hs layer1`
 
+    `ls layer1`
+
+    `ls layer1/etc`
+
     `cat layer1/etc/debian_version`
 
     `find layer1 -name nginx`
@@ -172,15 +176,21 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     `du -hs layer2`
 
+    `ls layer2`
+
     `cat layer2/etc/debian_version`
 
     `find layer2 -name nginx`
+
+    `ldd layer2/usr/sbin/nginx`
 
     `./layer2/usr/sbin/nginx`
 
     Layer3
 
     `du -hs layer3`
+
+    `ls layer3`
 
     `ls layer3/usr/sbin/nginx`
 
