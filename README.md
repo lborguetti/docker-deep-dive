@@ -108,7 +108,7 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
     * digite (host): `docker save hello-world > hello-world.tar`
 
-    * digite (host): `mkdir -p hello-world`
+    * digite (host): `mkdir --parents hello-world`
 
     * digite (host): `tar --directory hello-world --extract --file hello-world.tar`
 
@@ -124,13 +124,15 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
 
 *  prática:
 
+    https://github.com/nginxinc/docker-nginx/blob/594ce7a8bc26c85af88495ac94d5cd0096b306f7/mainline/buster/Dockerfile
+
     1. exportar a imagem do nginx e verificar seu conteúdo
 
-    `docker pull nginx`
+    `docker pull nginx:1.17.10`
 
-    `docker save nginx > nginx.tar`
+    `docker save nginx:1.17.10 > nginx.tar`
 
-    `mkdir -p nginx`
+    `mkdir --parents nginx`
 
     `tar --directory nginx --extract --file nginx.tar`
 
@@ -139,6 +141,51 @@ Docker Hub <---> Pull/Push <---> Docker Engine (daemon)
     `tree nginx`
 
     `jq < nginx/manifest.json`
+
+    `jq '.[0].Config' < nginx/manifest.json`
+
+    `docker images --no-trunc nginx:1.17.10`
+
+    `jq '.[0].Layers' < nginx/manifest.json`
+
+    3. descompatando algumas "layers"
+
+    `mkdir --parents layer1 layer2 layer3`
+
+    `tar --directory layer1 --extract --file nginx/4b06198a66029c40c12e10d43cc47901e788295c906306fb0f44ea5e5b300dc9/layer.tar`
+
+    `tar --directory layer2 --extract --file nginx/ad83e86a3b51398162fa7838af4f42c392036c53b3795267e9f36fd322f2588d/layer.tar`
+
+    `tar --directory layer3 --extract --file nginx/e581864dfa52cf8881e598876fe4bcebb373db22a2a9b6f6d6fccce623239b89/layer.tar`
+
+    5. navegando no sistema de arquivos das "layers"
+
+    Layer1
+
+    `du -hs layer1`
+
+    `cat layer1/etc/debian_version`
+
+    `find layer1 -name nginx`
+
+    Layer2
+
+    `du -hs layer2`
+
+    `cat layer2/etc/debian_version`
+
+    `find layer2 -name nginx`
+
+    `./layer2/usr/sbin/nginx`
+
+    Layer3
+
+    `du -hs layer3`
+
+    `ls layer3/usr/sbin/nginx`
+
+    `find layer3`
+
 
 ## Docker Network
 
