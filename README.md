@@ -285,6 +285,58 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 3 (host): observe o resultado.
 
+* prática:
+
+    1. criar dois contêiners (um servidor web e outro client) conectados em uma rede exclusiva (docker network).
+
+    `docker network create tarrafa`
+
+    `docker run --name=webserver --network=tarrafa --detach nginx:1.17.10`
+
+    `docker run --name=webclient --network=tarrafa --rm --tty --interactive debian /bin/bash`
+
+    `apt-get --yes update && apt-get --yes install curl`
+
+    `curl http://webserver`
+
+    2. em outro terminal desconectar o contêiner webclient da rede criada
+
+    `docker network disconnect tarrafa webclient`
+
+    3. retorno para o terminal onde o contêiner webclient está em execucação
+
+    `curl http://webserver`
+
+    `ip address show`
+
+    4. em outro terminal conectar o contêiner webclient na rede criada
+
+    `docker network connect tarrafa webclient`
+
+    5. retorno para o terminal onde o contêiner webclient está em execucação
+
+    `ip address show`
+
+    `curl http://webserver`
+
+    6. verifique os detalhes das redes dos contêiners
+
+    `docker network inspect tarrafa  -f "{{json .Containers }}" | jq`
+
+    `docker inspect webserver -f "{{json .NetworkSettings.Networks }}" | jq`
+
+    `docker inspect webclient -f "{{json .NetworkSettings.Networks }}" | jq`
+
+    7. remover os contêiners e a rede criada
+
+    `docker ps`
+
+    `docker stop webserver`
+
+    `docker rm webserver`
+
+    `docker network rm tarrafa`
+
 *  **host** pode ser útil para otimizar o desempenho. Se você usar o modo de rede host para um contêiner, a stack de rede desse contêiner não será isolada do host. O driver de rede do host funciona apenas em hosts Linux.
 
     * abra dois terminais: (terminal 1) e (terminal 2)
@@ -299,11 +351,35 @@ Abra um terminal e digite: `docker info` observe os drivers de rede e demais inf
 
     * no terminal 2 digite (host): `ip route show` observe o endereço do gateway padrão.
 
+* prática:
+
+    1. criar um contêiner (servidor web) utilizando a rede do host.
+
+    `docker run --name=webserver --network=host --detach nginx:1.17.10`
+
+    `docker exec --tty --interactive webserver /bin/bash`
+
+    `apt-get --yes update && apt-get --yes install iproute2`
+
+    `ip address show`
+
+    2. abrir no navegador:
+
+    `http://127.0.0.1`
+
+    3. remover o contêiner
+
+    `docker ps`
+
+    `docker stop webserver`
+
+    `docker rm webserver`
+
 Por padrão, quando você cria um contêiner, ele não publica nenhuma de suas portas no "mundo externo". Para disponibilizar uma porta para serviços fora do Docker ou para contêineres que não estão conectados, use a opção `--publish` ou `-p`. Dessa forma o Docker cria uma regra de firewall que mapeia uma porta do contêiner para uma porta no host. Obs: Não é um "driver" de rede do Docker.
 
 * abra três terminais: (terminal 1), (terminal 2) e (terminal 3)
 
-    * no terminal 1 digite (host):`docker run --name=nginx --publish=8080:80 --rm nginx`
+    * no terminal 1 digite (host):`docker run --name=nginx --publish=8080:80 --rm nginx:1.17.10`
 
     * no terminal 2 digite (host): `docker port nginx` ou `docker ps`
 
